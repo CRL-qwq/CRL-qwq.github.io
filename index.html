@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRL_qwq的网站</title>
+    <title>跳转页面</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
     <style>
@@ -12,14 +12,11 @@
             font-family: 'Inter', sans-serif;
             background-color: #f4f4f9;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-        }
-
-        .container {
-            text-align: center;
         }
 
         h1 {
@@ -39,6 +36,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 0.5rem;
         }
 
         button:hover {
@@ -50,11 +48,9 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>点击下方按钮跳转至 tcs.github.io</h1>
-        <button onclick="window.location.href='https://crl-qwq.github.io/tcs.github.io'">跳转</button>
-    </div>
+    <h1>点击下方按钮进行跳转</h1>
+    <button onclick="window.location.href='https://crl-qwq.github.io/tcs/'">跳转至 crl-qwq.github.io/tcs/</button>
+    <button onclick="window.location.href='https://crl-qwq.github.io/qz'">跳转至 crl-qwq.github.io/qz</button>
 </body>
 
 </html>
-    
