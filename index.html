@@ -1,42 +1,140 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贪吃蛇游戏</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-    <title>简单网页示例</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #game-board {
+            border: 2px solid #333;
+            background-color: #fff;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 font-sans">
-    <!-- 导航栏 -->
-    <nav class="bg-blue-600 p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="#" class="text-white text-xl font-bold">网站标题</a>
-            <ul class="flex space-x-4">
-                <li><a href="#" class="text-white hover:text-gray-200">首页</a></li>
-                <li><a href="#" class="text-white hover:text-gray-200">关于我们</a></li>
-                <li><a href="#" class="text-white hover:text-gray-200">联系我们</a></li>
-            </ul>
-        </div>
-    </nav>
+<body>
+    <canvas id="game-board" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('game-board');
+        const ctx = canvas.getContext('2d');
 
-    <!-- 内容区域 -->
-    <div class="container mx-auto p-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">欢迎来到我们的网站</h1>
-        <p class="text-gray-600 leading-relaxed mb-8">
-            这是一个简单的网页示例，展示了如何使用 Tailwind CSS 和 Font Awesome 来创建一个现代化的网页。
-            你可以根据自己的需求对这个网页进行修改和扩展。
-        </p>
-        <a href="#" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">了解更多</a>
-    </div>
+        const blockSize = 20;
+        const widthInBlocks = canvas.width / blockSize;
+        const heightInBlocks = canvas.height / blockSize;
 
-    <!-- 页脚 -->
-    <footer class="bg-gray-800 p-4 text-center text-white">
-        <p>&copy; 2025 版权所有。保留所有权利。</p>
-    </footer>
+        let snake = [
+            { x: 5, y: 5 }
+        ];
+        let direction = 'right';
+        let food = {
+            x: Math.floor(Math.random() * widthInBlocks),
+            y: Math.floor(Math.random() * heightInBlocks)
+        };
+
+        function drawBlock(ctx, x, y) {
+            ctx.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
+        }
+
+        function drawSnake() {
+            ctx.fillStyle = '#00ff00';
+            snake.forEach(segment => {
+                drawBlock(ctx, segment.x, segment.y);
+            });
+        }
+
+        function drawFood() {
+            ctx.fillStyle = '#ff0000';
+            drawBlock(ctx, food.x, food.y);
+        }
+
+        function moveSnake() {
+            let head = { ...snake[0] };
+            switch (direction) {
+                case 'right':
+                    head.x++;
+                    break;
+                case 'left':
+                    head.x--;
+                    break;
+                case 'up':
+                    head.y--;
+                    break;
+                case 'down':
+                    head.y++;
+                    break;
+            }
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                food = {
+                    x: Math.floor(Math.random() * widthInBlocks),
+                    y: Math.floor(Math.random() * heightInBlocks)
+                };
+            } else {
+                snake.pop();
+            }
+        }
+
+        function checkCollision() {
+            let head = snake[0];
+            if (head.x < 0 || head.x >= widthInBlocks || head.y < 0 || head.y >= heightInBlocks) {
+                return true;
+            }
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawSnake();
+            drawFood();
+            moveSnake();
+            if (checkCollision()) {
+                alert('游戏结束！');
+                snake = [
+                    { x: 5, y: 5 }
+                ];
+                direction = 'right';
+            }
+            setTimeout(gameLoop, 200);
+        }
+
+        document.addEventListener('keydown', function (event) {
+            switch (event.key) {
+                case 'ArrowRight':
+                    if (direction !== 'left') direction = 'right';
+                    break;
+                case 'ArrowLeft':
+                    if (direction !== 'right') direction = 'left';
+                    break;
+                case 'ArrowUp':
+                    if (direction !== 'down') direction = 'up';
+                    break;
+                case 'ArrowDown':
+                    if (direction !== 'up') direction = 'down';
+                    break;
+            }
+        });
+
+        gameLoop();
+    </script>
 </body>
 
-</html>    
+</html>
+    
